@@ -1,0 +1,95 @@
+openapi: 3.0.0
+info:
+  title: Meeting Room Reservation API
+  version: 1.0.0
+paths:
+  /api/rooms:
+    get:
+      summary: List all rooms
+      responses:
+        '200':
+          description: List of rooms
+    post:
+      summary: Create a room (Admin)
+      security:
+        - AdminAuth: []
+  
+  /api/rooms/{id}:
+    delete:
+      summary: Delete a room (Admin)
+      security:
+        - AdminAuth: []
+
+  /api/reservations:
+    get:
+      summary: Get reservations (filter by date/room)
+      parameters:
+        - name: roomId
+          in: query
+          schema:
+            type: string
+        - name: date
+          in: query
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: List of booked slots
+    post:
+      summary: Book a slot
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                roomId:
+                  type: string
+                startTime:
+                  type: string
+                  format: date-time
+                userName:
+                  type: string
+                userPhone:
+                  type: string
+      responses:
+        '201':
+          description: Booked successfully
+
+  /api/reservations/{id}:
+    delete:
+      summary: Cancel reservation
+      description: Requires Name+Phone match OR Admin Auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userName:
+                  type: string
+                userPhone:
+                  type: string
+                # Admin bypasses this check on server side if cookie present
+      responses:
+        '200':
+          description: Cancelled
+        '403':
+          description: Credentials do not match
+
+  /api/admin/login:
+    post:
+      summary: Admin login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                password:
+                  type: string
+                  example: "00001"
+      responses:
+        '200':
+          description: Auth successful (Set-Cookie)
