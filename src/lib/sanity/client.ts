@@ -4,8 +4,8 @@ import { createClient } from "next-sanity";
 export const projectId = "18wsqsix";
 export const dataset = "production";
 export const apiVersion = "2024-01-29";
-// Hardcoding token to ensure no environment variable issues
-export const token = "skIUpJLAwU75f1OK8pZCDCXE4CJgl6qPKzgrQ4qh8VgbUS8MjjzQ6QH4ytt2y1F944ljbv6MFtKbnTgjbv9EKjkCWnqZnw2dINMtRSBQuxrLnra78CxioACLJsfEFXLTlY9tbQlbteCGuITA3NaaKbSCVlpZO8w7lYVurelXFF6IXl0fy8K3Go";
+// Hardcoding token to ensure no environment variable issues (Trying with trailing dot)
+export const token = "skIUpJLAwU75f1OK8pZCDCXE4CJgl6qPKzgrQ4qh8VgbUS8MjjzQ6QH4ytt2y1F944ljbv6MFtKbnTgjbv9EKjkCWnqZnw2dINMtRSBQuxrLnra78CxioACLJsfEFXLTlY9tbQlbteCGuITA3NaaKbSCVlpZO8w7lYVurelXFF6IXl0fy8K3Go.";
 
 export const client = createClient({
   projectId,
