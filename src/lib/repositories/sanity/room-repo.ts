@@ -6,38 +6,55 @@ export class SanityRoomRepository implements IRoomRepository {
   // Helper to parse Sanity doc to MeetingRoom
   private mapDocumentToRoom(doc: any): MeetingRoom {
     return {
-      id: doc._id,
-      name: doc.name,
-      active: doc.active ?? true,
-      image: doc.imageUrl || null, // We will fetch URL via GROQ expansion if possible, or store as field
+      id: doc?._id || "",
+      name: doc?.name || "Unnamed Room",
+      active: doc?.active ?? true,
+      image: doc?.imageUrl || null, 
     };
   }
 
   async getAll(): Promise<MeetingRoom[]> {
-    // image field가 asset reference일 경우 URL을 가져오기 위한 쿼리
-    const query = `*[_type == "meetingRoom" && active == true] | order(createdAt desc) {
-      _id,
-      name,
-      active,
-      "imageUrl": image.asset->url,
-      _createdAt,
-      _updatedAt
-    }`;
-    const docs = await client.fetch(query);
-    return docs.map(this.mapDocumentToRoom);
+    try {
+      // image field가 asset reference일 경우 URL을 가져오기 위한 쿼리
+      const query = `*[_type == "meetingRoom" && active == true] | order(_createdAt desc) {
+        _id,
+        name,
+        active,
+        "imageUrl": image.asset->url,
+        _createdAt,
+        _updatedAt
+      }`;
+      const docs = await client.fetch(query);
+      
+      if (!Array.isArray(docs)) {
+        console.error("Sanity fetch returned non-array:", docs);
+        return [];
+      }
+      
+      return docs.map(this.mapDocumentToRoom);
+    } catch (error) {
+      console.error("Failed to fetch rooms from Sanity:", error);
+      // Return empty array instead of crashing to allow page load
+      return [];
+    }
   }
 
   async getById(id: string): Promise<MeetingRoom | null> {
-    const query = `*[_type == "meetingRoom" && _id == $id][0] {
-      _id,
-      name,
-      active,
-      "imageUrl": image.asset->url,
-      _createdAt,
-      _updatedAt
-    }`;
-    const doc = await client.fetch(query, { id });
-    return doc ? this.mapDocumentToRoom(doc) : null;
+    try {
+      const query = `*[_type == "meetingRoom" && _id == $id][0] {
+        _id,
+        name,
+        active,
+        "imageUrl": image.asset->url,
+        _createdAt,
+        _updatedAt
+      }`;
+      const doc = await client.fetch(query, { id });
+      return doc ? this.mapDocumentToRoom(doc) : null;
+    } catch (error) {
+      console.error(`Failed to fetch room ${id}:`, error);
+      return null;
+    }
   }
 
   async create(room: Omit<MeetingRoom, "id">): Promise<MeetingRoom> {
