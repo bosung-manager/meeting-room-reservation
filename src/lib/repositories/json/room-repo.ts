@@ -1,7 +1,6 @@
 import { MeetingRoom } from "@/types";
 import { IRoomRepository } from "../interfaces";
 import { readDb, writeDb } from "../../db/local-json";
-import { v4 as uuidv4 } from "uuid";
 
 // Since uuid might not be installed or needed for local dev, I'll use a simple generator
 const generateId = () => Math.random().toString(36).substr(2, 9);
