@@ -10,8 +10,6 @@ export class SanityRoomRepository implements IRoomRepository {
       name: doc.name,
       active: doc.active ?? true,
       image: doc.imageUrl || null, // We will fetch URL via GROQ expansion if possible, or store as field
-      createdAt: doc._createdAt,
-      updatedAt: doc._updatedAt,
     };
   }
 
@@ -79,8 +77,6 @@ export class SanityRoomRepository implements IRoomRepository {
       name: room.name,
       active: true,
       image: room.image, // Return original input for immediate UI feedback, though actual stored is asset
-      createdAt: created._createdAt,
-      updatedAt: created._updatedAt,
     };
   }
 
