@@ -77,6 +77,7 @@ export default function CreateRoomForm({ onCreate }: CreateRoomFormProps) {
               hover:file:bg-blue-100"
           />
           {image && (
+            // eslint-disable-next-line @next/next/no-img-element
             <img src={image} alt="Preview" className="h-10 w-10 object-cover rounded-full border" />
           )}
         </div>

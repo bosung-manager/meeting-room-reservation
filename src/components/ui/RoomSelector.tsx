@@ -22,6 +22,7 @@ export default function RoomSelector({ rooms, selectedRoomId, onSelect }: RoomSe
           }`}
         >
           {room.image ? (
+            // eslint-disable-next-line @next/next/no-img-element
             <img src={room.image} alt={room.name} className="w-10 h-10 rounded-full object-cover border" />
           ) : (
             <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-400 text-xs">

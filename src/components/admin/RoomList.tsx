@@ -24,6 +24,7 @@ export default function RoomList({ rooms, onDelete }: RoomListProps) {
             <tr key={room.id}>
               <td className="px-6 py-4 whitespace-nowrap">
                 {room.image ? (
+                  // eslint-disable-next-line @next/next/no-img-element
                   <img src={room.image} alt={room.name} className="h-10 w-10 rounded-full object-cover border" />
                 ) : (
                   <div className="h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center text-xs text-gray-400">

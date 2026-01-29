@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { MeetingRoom, Reservation } from "@/types";
 import RoomSelector from "@/components/ui/RoomSelector";
 import WeeklyCalendar from "@/components/booking/WeeklyCalendar";
@@ -33,7 +33,7 @@ export default function Home() {
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
   const [selectedReservation, setSelectedReservation] = useState<Reservation | null>(null);
 
-  const fetchReservations = () => {
+  const fetchReservations = useCallback(() => {
     if (selectedRoomId) {
       const start = getStartOfWeek(selectedDate).toISOString();
       const end = getEndOfWeek(selectedDate).toISOString();
@@ -44,7 +44,7 @@ export default function Home() {
           setReservations(data);
         });
     }
-  };
+  }, [selectedRoomId, selectedDate]);
 
   useEffect(() => {
     fetch("/api/rooms")
@@ -57,7 +57,7 @@ export default function Home() {
 
   useEffect(() => {
     fetchReservations();
-  }, [selectedRoomId, selectedDate]);
+  }, [fetchReservations]);
 
   const handleSlotClick = (startTime: string, reservation?: Reservation) => {
     if (reservation) {
