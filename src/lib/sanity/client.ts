@@ -1,7 +1,8 @@
 import { createClient } from "next-sanity";
 
-export const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
-export const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || "production";
+// Hardcoded for build stability
+export const projectId = "18wsqsix";
+export const dataset = "production";
 export const apiVersion = "2024-01-29";
 export const token = process.env.SANITY_API_TOKEN;
 
