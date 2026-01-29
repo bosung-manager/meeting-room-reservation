@@ -58,43 +58,43 @@ export class SanityRoomRepository implements IRoomRepository {
   }
 
   async create(room: Omit<MeetingRoom, "id">): Promise<MeetingRoom> {
-    let imageAssetId = null;
+    try {
+      let imageAssetId = null;
 
-    // 만약 이미지가 Base64 포맷이라면 Sanity Asset으로 업로드 시도
-    if (room.image && room.image.startsWith("data:image")) {
-      try {
-        // Base64 to Buffer/Blob logic needs fetch or buffer
-        // Browser env vs Node env check might be needed, but this runs on server actions/API routes (Node)
-        const base64Data = room.image.split(",")[1];
-        const buffer = Buffer.from(base64Data, "base64");
-        
-        const asset = await client.assets.upload("image", buffer, {
-          filename: `room-${Date.now()}`,
-        });
-        imageAssetId = asset._id;
-      } catch (e) {
-        console.error("Failed to upload image to Sanity:", e);
-        // 실패 시 이미지는 무시하거나 에러 처리
+      // 만약 이미지가 Base64 포맷이라면 Sanity Asset으로 업로드 시도
+      if (room.image && room.image.startsWith("data:image")) {
+        try {
+          const base64Data = room.image.split(",")[1];
+          const buffer = Buffer.from(base64Data, "base64");
+          
+          const asset = await client.assets.upload("image", buffer, {
+            filename: `room-${Date.now()}`,
+          });
+          imageAssetId = asset._id;
+        } catch (e) {
+          console.error("Failed to upload image to Sanity:", e);
+        }
       }
+
+      const doc = {
+        _type: "meetingRoom",
+        name: room.name,
+        active: true,
+        image: imageAssetId ? { _type: "image", asset: { _type: "reference", _ref: imageAssetId } } : undefined,
+      };
+
+      const created = await client.create(doc);
+      
+      return {
+        id: created._id,
+        name: room.name,
+        active: true,
+        image: room.image, 
+      };
+    } catch (error: any) {
+      console.error("Failed to create room:", error);
+      throw new Error(`Sanity Room Create Failed: ${error.message || JSON.stringify(error)}`);
     }
-
-    const doc = {
-      _type: "meetingRoom",
-      name: room.name,
-      active: true,
-      image: imageAssetId ? { _type: "image", asset: { _type: "reference", _ref: imageAssetId } } : undefined,
-    };
-
-    const created = await client.create(doc);
-    
-    // Return complete object (need to re-fetch or construct)
-    // Constructing for speed
-    return {
-      id: created._id,
-      name: room.name,
-      active: true,
-      image: room.image, // Return original input for immediate UI feedback, though actual stored is asset
-    };
   }
 
   async delete(id: string): Promise<boolean> {

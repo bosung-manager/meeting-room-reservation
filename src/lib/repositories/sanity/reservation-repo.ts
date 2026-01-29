@@ -75,26 +75,31 @@ export class SanityReservationRepository implements IReservationRepository {
   }
 
   async create(reservation: Omit<Reservation, "id" | "createdAt">): Promise<Reservation> {
-    const doc = {
-      _type: "reservation",
-      roomId: reservation.roomId,
-      startTime: reservation.startTime,
-      endTime: reservation.endTime,
-      userName: reservation.userName,
-      userPhone: reservation.userPhone,
-      agenda: reservation.agenda,
-      attendees: reservation.attendees,
-      groupId: reservation.groupId || `group-${Date.now()}`, // Fallback if missing
-    };
+    try {
+      const doc = {
+        _type: "reservation",
+        roomId: reservation.roomId,
+        startTime: reservation.startTime,
+        endTime: reservation.endTime,
+        userName: reservation.userName,
+        userPhone: reservation.userPhone,
+        agenda: reservation.agenda,
+        attendees: reservation.attendees,
+        groupId: reservation.groupId || `group-${Date.now()}`, // Fallback if missing
+      };
 
-    const created = await client.create(doc);
+      const created = await client.create(doc);
 
-    return {
-      ...reservation,
-      id: created._id,
-      groupId: doc.groupId,
-      createdAt: created._createdAt,
-    };
+      return {
+        ...reservation,
+        id: created._id,
+        groupId: doc.groupId,
+        createdAt: created._createdAt,
+      };
+    } catch (error: any) {
+      console.error("Failed to create reservation:", error);
+      throw new Error(`Sanity Create Failed: ${error.message || JSON.stringify(error)}`);
+    }
   }
 
   async delete(id: string): Promise<boolean> {
