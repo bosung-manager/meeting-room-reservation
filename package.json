@@ -17,6 +17,8 @@
     "next-sanity": "^9.12.3",
     "react": "^18",
     "react-dom": "^18",
+    "sanity": "^5.7.0",
+    "styled-components": "^6.3.8",
     "tailwind-merge": "^2.3.0"
   },
   "devDependencies": {
