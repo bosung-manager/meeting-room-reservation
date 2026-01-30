@@ -1,7 +1,7 @@
 import { createClient } from "next-sanity";
 
 // Hardcoded for build stability
-export const projectId = "18wsqsix";
+export const projectId = "fxndu62i";
 export const dataset = "production";
 export const apiVersion = "2024-01-29";
 // Hardcoding token to ensure no environment variable issues
