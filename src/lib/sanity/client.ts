@@ -5,7 +5,7 @@ export const projectId = "18wsqsix";
 export const dataset = "production";
 export const apiVersion = "2024-01-29";
 // Hardcoding token to ensure no environment variable issues
-export const token = "skyghp77sayYCnQYz5lo2KSg6OWT9rZmgp6zbnM6DQpQrEcU6qxKcvLz9mmn5ydlB0Eej5w8oPIL3tZuwIOchXrS4Wuugnqa45A7RjkBw7aFl0DsgHf25pDVMrpvj0EJGPUXSj1kT3EvQE3gIWDkHrsAojx8Td98KE5jVS0N5q1b3CUaAWCl";
+export const token = "sksFCzrM9L4jDccAiM6sMI7liHFj87VP4k1D0qMpu6QHJQi64dWdFfJGsZvKsn6jtVKzZLHeUq6VdQUfVFLbdgQmiFZN5cbObmf0gORuTMdTIGH7g3vbdampjhE5UzAPjtKDOeSqThDqBqByO4xYkvr0qv0gxQx8l1AZYLQd4Lm7Hprpbxtr";
 
 export const client = createClient({
   projectId,
